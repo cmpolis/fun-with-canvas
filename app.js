@@ -5,7 +5,7 @@
 var width = 600,
     height = 400,
     radius = 1.5,
-    pointCount = 10e3,
+    pointCount = 20e3,
     renderCount = 1,
     canvas = document.getElementById('scatterplot'),
     context = canvas.getContext('2d'),
@@ -58,7 +58,7 @@ var renderA = function(context, points) {
 
 // Group by color (fewer fill changes)
 var groupRender = function(context, points) {
-  context.globalAlpha = 0.44;
+  context.globalAlpha = 0.64;
   _.forEach(_.groupBy(points, 'color'), function(points, color) {
     context.fillStyle = color;
     points.forEach(function(point, ndx) {
