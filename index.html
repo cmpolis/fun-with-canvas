@@ -6,13 +6,16 @@
   <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
   <link href='/global.css' rel='stylesheet' type='text/css'>
   <style>
+    canvas {
+      border: 1px solid black;
+    }
 
   </style>
 </head>
 
 <body>
   <h1>Fun with Canvas</h1>
-  <div id='render-target'></div>
+  <canvas id="scatterplot" width="600" height="400"></canvas>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
   <script src="/app.js"></script>
 </body>
