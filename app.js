@@ -23,11 +23,31 @@ var generatePoint = function() {
 var points = _.range(pointCount).map(generatePoint);
 
 ///////////////////////////
+// MAKE NOT LOOK AWFUL ON RETINA/High DPI
+// http://jsfiddle.net/4xe4d/
+var devicePixelRatio = window.devicePixelRatio || 1;
+var backingStoreRatio = context.webkitBackingStorePixelRatio ||
+    context.mozBackingStorePixelRatio ||
+    context.msBackingStorePixelRatio ||
+    context.oBackingStorePixelRatio ||
+    context.backingStorePixelRatio || 1;
+var ratio = devicePixelRatio / backingStoreRatio;
+if (devicePixelRatio !== backingStoreRatio) { // upscale ratio if neccesary
+  var oldWidth = canvas.width;
+  var oldHeight = canvas.height;
+  canvas.width = Math.round(oldWidth * ratio);
+  canvas.height = Math.round(oldHeight * ratio);
+  canvas.style.width = oldWidth + 'px';
+  canvas.style.height = oldHeight + 'px';
+  context.scale(ratio, ratio);
+}
+
+///////////////////////////
 // RENDERING
 
 // Simple render
 var renderA = function(context, points) {
-  context.globalAlpha = 0.44;
+  context.globalAlpha = 0.64;
   points.forEach(function(point, ndx) {
     context.beginPath();
     context.arc(point.x, point.y, radius, 0, 2 * Math.PI, false);
