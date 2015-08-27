@@ -1,11 +1,11 @@
 //
 //
 //
-
+var canvasScaler = require('canvas-dpi-scaler');
 var width = 600,
     height = 400,
     radius = 1.5,
-    pointCount = 20e3,
+    pointCount = 10e3,
     renderCount = 1,
     canvas = document.getElementById('scatterplot'),
     context = canvas.getContext('2d'),
@@ -13,34 +13,17 @@ var width = 600,
 
 //
 var generatePoint = function() {
-  var obj = {
+  return {
     x: _.random(width),
     y: _.random(height),
     color: palette[_.random(palette.length-1)]
   };
-  return obj;
 };
 var points = _.range(pointCount).map(generatePoint);
 
 ///////////////////////////
 // MAKE NOT LOOK AWFUL ON RETINA/High DPI
-// http://jsfiddle.net/4xe4d/
-var devicePixelRatio = window.devicePixelRatio || 1;
-var backingStoreRatio = context.webkitBackingStorePixelRatio ||
-    context.mozBackingStorePixelRatio ||
-    context.msBackingStorePixelRatio ||
-    context.oBackingStorePixelRatio ||
-    context.backingStorePixelRatio || 1;
-var ratio = devicePixelRatio / backingStoreRatio;
-if (devicePixelRatio !== backingStoreRatio) { // upscale ratio if neccesary
-  var oldWidth = canvas.width;
-  var oldHeight = canvas.height;
-  canvas.width = Math.round(oldWidth * ratio);
-  canvas.height = Math.round(oldHeight * ratio);
-  canvas.style.width = oldWidth + 'px';
-  canvas.style.height = oldHeight + 'px';
-  context.scale(ratio, ratio);
-}
+canvasScaler(canvas, context);
 
 ///////////////////////////
 // RENDERING
@@ -92,7 +75,6 @@ function getMousePos(canvas, evt) {
 }
 
 canvas.addEventListener('mousemove', function(evt) {
-  //console.log(mousePos);
   if(isDragging) {
     var mousePos = getMousePos(canvas, evt),
         minX = Math.min(mousePos.x, initialPos.x),
@@ -119,15 +101,11 @@ canvas.addEventListener('mouseup', function(evt) {
       minY = Math.min(mousePos.y, initialPos.y),
       maxY = Math.max(mousePos.y, initialPos.y);
 
-  isDragging = false;
-  // var pointsInBounds = points.filter(function(point) {
-  //   return point.x >= minX && point.x <= maxX &&
-  //          point.y >= minY && point.y <= maxY;
-  // });
   points.forEach(function(point) {
     point.isSelected = point.x >= minX && point.x <= maxX &&
                        point.y >= minY && point.y <= maxY;
   });
   context.clearRect(0, 0, canvas.width, canvas.height);
   renderA(context, points);
+  isDragging = false;
 }, false);
