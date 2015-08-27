@@ -87,6 +87,9 @@ canvas.addEventListener('mousemove', function(evt) {
     });
     context.clearRect(0, 0, canvas.width, canvas.height);
     renderA(context, points);
+    context.rect(minX, minY, (maxX - minX), (maxY - minY));
+    context.strokeStyle = 'red';
+    context.stroke();
   }
 }, false);
 canvas.addEventListener('mousedown', function(evt) {
@@ -107,5 +110,8 @@ canvas.addEventListener('mouseup', function(evt) {
   });
   context.clearRect(0, 0, canvas.width, canvas.height);
   renderA(context, points);
+  context.rect(minX, minY, (maxX - minX), (maxY - minY));
+  context.strokeStyle = 'blue';
+  context.stroke();
   isDragging = false;
 }, false);
